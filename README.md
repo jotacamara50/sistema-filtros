@@ -1,90 +1,88 @@
-# Sistema de Filtros Dinâmicos
+# 🎯 Sistema de Filtros Dinâmicos
 
-Sistema completo de filtros dinâmicos criado do zero, sem bibliotecas externas (apenas React + TypeScript).
+Sistema profissional de filtros dinâmicos com arquitetura **Backend-Driven UI**, desenvolvido do zero sem bibliotecas externas (apenas React + TypeScript + Vite).
 
-## 🚀 Características
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-3178C6?style=flat&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-4.3.0-646CFF?style=flat&logo=vite)
 
-- ✅ **100% Dinâmico** - Sem valores mockados, totalmente configurável
-- ✅ **Multi-Select** - Com chips removíveis como na imagem
-- ✅ **Múltiplos Tipos de Campo** - Texto, número, data, select, multi-select, boolean
-- ✅ **Operadores Diversos** - Igual, diferente, contém, começa com, termina com, etc.
-- ✅ **Sem Bibliotecas Externas** - Apenas React puro
-- ✅ **TypeScript** - Totalmente tipado
-- ✅ **Responsivo** - Funciona em mobile e desktop
+## ✨ Características Principais
 
-## 📦 Instalação
+- 🎨 **Backend-Driven UI** - Configuração de filtros vinda da API
+- 🔍 **Multi-Select Avançado** - Com chips removíveis e visual moderno
+- 📊 **Múltiplos Tipos de Campo** - Text, number, date, select, multi-select
+- 🎯 **Operadores Inteligentes** - Equals, contains, in, greater than, etc.
+- ♿ **Acessibilidade Completa** - Navegação por teclado (TAB + Enter/Space)
+- 📱 **Totalmente Responsivo** - Mobile-first design
+- 🚀 **Zero Dependências Extras** - Apenas React puro
+- 💪 **TypeScript** - 100% tipado
+- 🎭 **API Mockada** - Simula latência de rede real, fácil migrar para API real
+
+## 🚀 Início Rápido
+
+### Instalação
 
 ```bash
 npm install
 ```
 
-## 🏃‍♂️ Executar
+### Executar em Desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-## 📖 Como Usar
+Acesse: `http://localhost:5173`
 
-### 1. Definir suas colunas
+### Build para Produção
 
-Em `src/App.tsx`, configure as colunas que deseja filtrar:
+```bash
+npm run build
+npm run preview
+```
+
+## 📋 Arquitetura
+
+### Backend-Driven UI
+
+A configuração dos filtros é **dinâmica e vem da API**, não está hardcoded no frontend:
 
 ```typescript
-const filterColumns: FilterColumn[] = [
+// A API retorna quais colunas podem ser filtradas
+const columns = await fetchFilterColumns();
+
+// Exemplo de resposta:
+[
   {
     key: 'cidade',
     label: 'Cidade',
     type: 'multiSelect',
     options: [
       { label: 'São Paulo, SP', value: 'sao-paulo' },
-      { label: 'Curitiba, PR', value: 'curitiba' },
-      // ... mais opções
+      { label: 'Curitiba, PR', value: 'curitiba' }
     ]
-  },
-  {
-    key: 'nome',
-    label: 'Nome',
-    type: 'text'
-  },
-  {
-    key: 'valor',
-    label: 'Valor',
-    type: 'number'
   }
-  // ... mais colunas
-];
+]
 ```
 
-### 2. Usar o componente
+### Fluxo de Dados
 
-```typescript
-<FilterPanel 
-  columns={filterColumns}
-  onFilter={(conditions) => {
-    // Aplicar filtros aos seus dados
-    console.log(conditions);
-  }}
-/>
 ```
-
-### 3. Aplicar filtros aos dados
-
-A função `applyFilters` em `App.tsx` mostra como aplicar os filtros:
-
-```typescript
-const filteredData = applyFilters(yourData, conditions);
+1. App carrega → fetchFilterColumns() + fetchAllTransactions()
+2. Renderiza filtros baseado na config da API
+3. Usuário aplica filtros → Filtra dados localmente
+4. Tabela atualiza em tempo real
 ```
 
 ## 🎨 Tipos de Campo Suportados
 
-| Tipo | Descrição | Operadores |
-|------|-----------|------------|
-| `text` | Campo de texto | equals, notEquals, contains, notContains, startsWith, endsWith |
-| `number` | Campo numérico | equals, notEquals, greaterThan, lessThan, between |
+| Tipo | Uso | Operadores Disponíveis |
+|------|-----|------------------------|
+| `text` | Campos de texto livre | equals, notEquals, contains, notContains, startsWith, endsWith |
+| `number` | Valores numéricos | equals, notEquals, greaterThan, lessThan, between |
 | `select` | Seleção única | equals, notEquals, in, notIn |
-| `multiSelect` | Seleção múltipla | in, notIn |
-| `date` | Data | equals, notEquals, greaterThan, lessThan, between |
+| `multiSelect` | Múltipla escolha | in, notIn |
+| `date` | Datas | equals, notEquals, greaterThan, lessThan, between |
 | `boolean` | Sim/Não | equals |
 
 ## 📁 Estrutura do Projeto
@@ -92,65 +90,128 @@ const filteredData = applyFilters(yourData, conditions);
 ```
 src/
 ├── components/
-│   ├── FilterPanel.tsx       # Componente principal
-│   ├── FilterPanel.css
-│   ├── FilterRow.tsx         # Linha individual de filtro
-│   ├── FilterRow.css
-│   ├── Select.tsx            # Select customizado
-│   ├── Select.css
-│   ├── MultiSelect.tsx       # Multi-select com chips
-│   └── MultiSelect.css
+│   ├── FilterPanel.tsx        # Painel principal de filtros
+│   ├── FilterRow.tsx          # Linha individual de filtro
+│   ├── Select.tsx             # Select customizado
+│   ├── MultiSelect.tsx        # Multi-select com chips
+│   ├── DataTable.tsx          # Tabela de resultados
+│   └── *.css                  # Estilos modulares
+├── hooks/
+│   └── useFilteredData.ts     # Hook para gerenciar dados e filtros
+├── services/
+│   └── api.ts                 # Camada de API (mockada)
 ├── types/
-│   └── filters.ts            # Definições TypeScript
-├── App.tsx                   # Exemplo de uso
-├── App.css
-├── main.tsx
-└── index.css
+│   ├── filters.ts             # Tipos dos filtros
+│   └── data.ts                # Tipos dos dados
+├── App.tsx                    # Aplicação principal
+└── main.tsx                   # Entry point
 ```
 
-## 🔧 Customização
+## 🔧 Migração para API Real
 
-### Adicionar novos operadores
+### Passo 1: Configurar endpoint da API
 
-Edite `src/types/filters.ts`:
+Em `src/services/api.ts`, descomente e configure:
 
 ```typescript
-export const OPERATOR_LABELS: Record<FilterOperator, string> = {
-  // ... operadores existentes
-  myCustomOperator: 'Meu Operador'
+export const fetchFilterColumns = async (): Promise<FilterColumn[]> => {
+  const response = await fetch('https://sua-api.com/api/filter-config', {
+    headers: {
+      'Authorization': 'Bearer seu-token'
+    }
+  });
+  return response.json();
+};
+
+export const fetchAllTransactions = async (): Promise<Transaction[]> => {
+  const response = await fetch('https://sua-api.com/api/transactions');
+  return response.json();
 };
 ```
 
-### Customizar cores
+### Passo 2: Formato esperado da API
 
-Edite os arquivos CSS em `src/components/` para ajustar as cores ao seu tema.
+**GET /api/filter-config** - Retorna configuração dos filtros:
+```json
+[
+  {
+    "key": "cidade",
+    "label": "Cidade",
+    "type": "multiSelect",
+    "options": [
+      { "label": "São Paulo, SP", "value": "sao-paulo" }
+    ]
+  }
+]
+```
 
-## 💡 Próximos Passos
+**GET /api/transactions** - Retorna os dados:
+```json
+[
+  {
+    "id": "1",
+    "cidade": "sao-paulo",
+    "valor": 15000.50,
+    "data": "2025-01-15"
+  }
+]
+```
 
-Quando você tiver sua tabela de dados, basta:
+## 💡 Como Usar
 
-1. Passar as colunas da tabela para o `FilterPanel`
-2. Usar a função `onFilter` para receber os filtros aplicados
-3. Filtrar seus dados usando a lógica em `applyFilters`
-
-## 📝 Exemplo Completo
+### Exemplo Básico
 
 ```typescript
 import { FilterPanel } from './components/FilterPanel';
+import { DataTable } from './components/DataTable';
+import { useFilteredData } from './hooks/useFilteredData';
 
-function MyApp() {
-  const [data, setData] = useState(myTableData);
-  
-  const handleFilter = (conditions) => {
-    const filtered = applyFilters(myTableData, conditions);
-    setData(filtered);
-  };
+function App() {
+  const { data, isLoading, applyFilters } = useFilteredData();
+  const [columns, setColumns] = useState([]);
+
+  useEffect(() => {
+    // Carregar configuração da API
+    fetchFilterColumns().then(setColumns);
+  }, []);
 
   return (
     <>
-      <FilterPanel columns={myColumns} onFilter={handleFilter} />
-      <MyTable data={data} />
+      <FilterPanel columns={columns} onFilter={applyFilters} />
+      <DataTable data={data} isLoading={isLoading} />
     </>
   );
 }
 ```
+
+## ♿ Acessibilidade
+
+- ✅ Navegação completa por teclado (TAB, Enter, Space, Escape)
+- ✅ Atributos ARIA adequados
+- ✅ Foco visual claro
+- ✅ Labels descritivos
+
+### Atalhos de Teclado
+
+| Ação | Tecla |
+|------|-------|
+| Navegar entre filtros | `TAB` |
+| Abrir/fechar dropdown | `Enter` ou `Space` |
+| Fechar dropdown | `Escape` |
+
+## 🎯 Recursos Implementados
+
+- [x] Backend-Driven UI (configuração vinda da API)
+- [x] API mockada com latência realista
+- [x] Sistema de filtros complexo e dinâmico
+- [x] Multi-select com chips removíveis
+- [x] Tabela responsiva com formatação
+- [x] Loading states e tratamento de erros
+- [x] Acessibilidade completa de teclado
+- [x] TypeScript com tipagem forte
+- [x] Design system consistente
+- [x] Zero bibliotecas externas
+
+## 📝 Licença
+
+MIT
