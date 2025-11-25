@@ -3,107 +3,48 @@ import { FilterPanel } from './components/FilterPanel';
 import { DataTable } from './components/DataTable';
 import { FilterColumn } from './types/filters';
 import { useFilteredData } from './hooks/useFilteredData';
+import { fetchFilterColumns } from './services/api';
+import { useState, useEffect } from 'react';
 import './App.css';
 
-// Defina suas colunas aqui - TOTALMENTE DINÂMICO
-const filterColumns: FilterColumn[] = [
-  {
-    key: 'cidade',
-    label: 'Cidade',
-    type: 'multiSelect',
-    options: [
-      { label: 'São Paulo, SP', value: 'sao-paulo' },
-      { label: 'Curitiba, PR', value: 'curitiba' },
-      { label: 'Salvador, BA', value: 'salvador' },
-      { label: 'Rio de Janeiro, RJ', value: 'rio' },
-      { label: 'Belo Horizonte, MG', value: 'bh' },
-      { label: 'Brasília, DF', value: 'brasilia' }
-    ]
-  },
-  {
-    key: 'regimeTributacao',
-    label: 'Regime de Tributação',
-    type: 'multiSelect',
-    options: [
-      { label: 'PRC', value: 'prc' },
-      { label: 'Outro 1', value: 'outro1' },
-      { label: 'Outro 2', value: 'outro2' },
-      { label: 'Simples Nacional', value: 'simples' },
-      { label: 'Lucro Presumido', value: 'lucro-presumido' }
-    ]
-  },
-  {
-    key: 'prc',
-    label: 'PRC',
-    type: 'select',
-    options: [
-      { label: 'Sim', value: 'sim' },
-      { label: 'Não', value: 'nao' }
-    ]
-  },
-  {
-    key: 'paisRemetente',
-    label: 'País (Remetente)',
-    type: 'select',
-    options: [
-      { label: 'Brasil (BR)', value: 'br' },
-      { label: 'Estados Unidos (US)', value: 'us' },
-      { label: 'China (CN)', value: 'cn' },
-      { label: 'Argentina (AR)', value: 'ar' },
-      { label: 'Japão (JP)', value: 'jp' }
-    ]
-  },
-  {
-    key: 'cidadeRemetente',
-    label: 'Cidade (Remetente)',
-    type: 'text'
-  },
-  {
-    key: 'paisDestinatario',
-    label: 'País (Destinatário)',
-    type: 'select',
-    options: [
-      { label: 'China (CN)', value: 'cn' },
-      { label: 'Estados Unidos (US)', value: 'us' },
-      { label: 'Brasil (BR)', value: 'br' },
-      { label: 'Argentina (AR)', value: 'ar' },
-      { label: 'Japão (JP)', value: 'jp' }
-    ]
-  },
-  {
-    key: 'cidadeDestinatario',
-    label: 'Cidade (Destinatário)',
-    type: 'text'
-  },
-  {
-    key: 'valor',
-    label: 'Valor',
-    type: 'number'
-  },
-  {
-    key: 'data',
-    label: 'Data',
-    type: 'date'
-  },
-  {
-    key: 'status',
-    label: 'Status',
-    type: 'select',
-    options: [
-      { label: 'Ativo', value: 'ativo' },
-      { label: 'Pendente', value: 'pendente' },
-      { label: 'Cancelado', value: 'cancelado' }
-    ]
-  }
-];
-
 function App() {
+  const [filterColumns, setFilterColumns] = useState<FilterColumn[]>([]);
+  const [isLoadingColumns, setIsLoadingColumns] = useState(true);
+  
   // Hook que gerencia dados da API e aplica filtros
   const { data, isLoading, error, applyFilters, reload } = useFilteredData();
+
+  // Buscar configuração de colunas da API
+  useEffect(() => {
+    const loadColumns = async () => {
+      try {
+        setIsLoadingColumns(true);
+        const columns = await fetchFilterColumns();
+        setFilterColumns(columns);
+      } catch (err) {
+        console.error('Erro ao carregar colunas:', err);
+      } finally {
+        setIsLoadingColumns(false);
+      }
+    };
+    
+    loadColumns();
+  }, []);
 
   const handleFilter = (conditions: any[]) => {
     applyFilters(conditions);
   };
+
+  if (isLoadingColumns) {
+    return (
+      <div className="app">
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Carregando configuração...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app">
@@ -132,25 +73,28 @@ function App() {
       <div className="instructions">
         <h3>📡 API Mockada - Como funciona:</h3>
         <p>
-          Este sistema simula uma chamada de API real com latência de rede. 
-          Os dados são carregados ao iniciar e os filtros são aplicados localmente.
+          Este sistema simula chamadas de API reais com latência de rede. 
+          Tanto os dados quanto a <strong>configuração de filtros</strong> vêm da API (mockada).
         </p>
         
         <h3>🔄 Para usar API real:</h3>
         <ol>
           <li>Abra o arquivo <code>src/services/api.ts</code></li>
-          <li>Substitua <code>fetchAllTransactions</code> por uma chamada real com <code>fetch</code> ou <code>axios</code></li>
+          <li>Substitua <code>fetchAllTransactions</code> e <code>fetchFilterColumns</code> por chamadas reais</li>
           <li>Ajuste a URL e headers conforme sua API</li>
+          <li>O backend deve retornar as colunas disponíveis no formato <code>FilterColumn[]</code></li>
         </ol>
         
         <h3>✨ Recursos implementados:</h3>
         <ul>
           <li>✅ Consumo de API simulada (fácil migrar para API real)</li>
+          <li>✅ <strong>Configuração de filtros vinda da API (Backend-Driven UI)</strong></li>
           <li>✅ Loading state durante carregamento</li>
           <li>✅ Tratamento de erros</li>
           <li>✅ Filtros aplicados em tempo real</li>
           <li>✅ Tabela responsiva com dados formatados</li>
           <li>✅ Multi-select com chips removíveis</li>
+          <li>✅ Acessibilidade de teclado (TAB + Enter/Espaço)</li>
           <li>✅ Sistema completamente tipado (TypeScript)</li>
         </ul>
       </div>

@@ -1,4 +1,97 @@
 import { Transaction, ApiResponse } from '../types/data';
+import { FilterColumn } from '../types/filters';
+
+// Configuração de colunas que viria da API
+const mockFilterColumns: FilterColumn[] = [
+  {
+    key: 'cidade',
+    label: 'Cidade',
+    type: 'multiSelect',
+    options: [
+      { label: 'São Paulo, SP', value: 'sao-paulo' },
+      { label: 'Curitiba, PR', value: 'curitiba' },
+      { label: 'Salvador, BA', value: 'salvador' },
+      { label: 'Rio de Janeiro, RJ', value: 'rio' },
+      { label: 'Belo Horizonte, MG', value: 'bh' },
+      { label: 'Brasília, DF', value: 'brasilia' }
+    ]
+  },
+  {
+    key: 'regimeTributacao',
+    label: 'Regime de Tributação',
+    type: 'multiSelect',
+    options: [
+      { label: 'PRC', value: 'prc' },
+      { label: 'Outro 1', value: 'outro1' },
+      { label: 'Outro 2', value: 'outro2' },
+      { label: 'Simples Nacional', value: 'simples' },
+      { label: 'Lucro Presumido', value: 'lucro-presumido' }
+    ]
+  },
+  {
+    key: 'prc',
+    label: 'PRC',
+    type: 'select',
+    options: [
+      { label: 'Sim', value: 'sim' },
+      { label: 'Não', value: 'nao' }
+    ]
+  },
+  {
+    key: 'paisRemetente',
+    label: 'País (Remetente)',
+    type: 'select',
+    options: [
+      { label: 'Brasil (BR)', value: 'br' },
+      { label: 'Estados Unidos (US)', value: 'us' },
+      { label: 'China (CN)', value: 'cn' },
+      { label: 'Argentina (AR)', value: 'ar' },
+      { label: 'Japão (JP)', value: 'jp' }
+    ]
+  },
+  {
+    key: 'cidadeRemetente',
+    label: 'Cidade (Remetente)',
+    type: 'text'
+  },
+  {
+    key: 'paisDestinatario',
+    label: 'País (Destinatário)',
+    type: 'select',
+    options: [
+      { label: 'China (CN)', value: 'cn' },
+      { label: 'Estados Unidos (US)', value: 'us' },
+      { label: 'Brasil (BR)', value: 'br' },
+      { label: 'Argentina (AR)', value: 'ar' },
+      { label: 'Japão (JP)', value: 'jp' }
+    ]
+  },
+  {
+    key: 'cidadeDestinatario',
+    label: 'Cidade (Destinatário)',
+    type: 'text'
+  },
+  {
+    key: 'valor',
+    label: 'Valor',
+    type: 'number'
+  },
+  {
+    key: 'data',
+    label: 'Data',
+    type: 'date'
+  },
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'select',
+    options: [
+      { label: 'Ativo', value: 'ativo' },
+      { label: 'Pendente', value: 'pendente' },
+      { label: 'Cancelado', value: 'cancelado' }
+    ]
+  }
+];
 
 // Dados mockados que simulam resposta da API
 const mockTransactions: Transaction[] = [
@@ -196,6 +289,20 @@ export const fetchTransactionById = async (id: string): Promise<Transaction | nu
   
   const transaction = mockTransactions.find(t => t.id === id);
   return transaction || null;
+};
+
+/**
+ * Simula buscar configuração de colunas da API
+ * Em produção, isso viria do backend com as colunas e opções disponíveis
+ */
+export const fetchFilterColumns = async (): Promise<FilterColumn[]> => {
+  await simulateNetworkDelay(400);
+  
+  // Em uma API real, aqui você faria:
+  // const response = await fetch('/api/filter-config');
+  // return response.json();
+  
+  return mockFilterColumns;
 };
 
 /**
