@@ -1,0 +1,135 @@
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.app-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.app-header p {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.active-filters-display {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.active-filters-display h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.active-filters-display pre {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 13px;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.instructions {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 30px;
+}
+
+.instructions h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+
+.instructions h3:first-child {
+  margin-top: 0;
+}
+
+.instructions p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.instructions code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #4f46e5;
+}
+
+.instructions ol,
+.instructions ul {
+  margin-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 8px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #991b1b;
+  margin-bottom: 24px;
+}
+
+.error-banner svg {
+  flex-shrink: 0;
+}
+
+.error-banner button {
+  margin-left: auto;
+  padding: 6px 12px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.error-banner button:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 24px;
+  }
+
+  .app-header p {
+    font-size: 14px;
+  }
+}
