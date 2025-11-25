@@ -23,11 +23,25 @@ export const Select: React.FC<SelectProps> = ({
 
   const selectedOption = options.find(o => o.value === value);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setIsOpen(!isOpen);
+    } else if (e.key === 'Escape') {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <div className="custom-select">
       <div 
         className="select-trigger"
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
       >
         <span className={!value ? 'select-placeholder' : ''}>
           {selectedOption?.label || placeholder}

@@ -42,11 +42,25 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     return option?.label || val;
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setIsOpen(!isOpen);
+    } else if (e.key === 'Escape') {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <div className="multi-select">
       <div 
         className="multi-select-trigger"
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
       >
         <div className="multi-select-values">
           {value.length > 0 ? (
