@@ -69,35 +69,6 @@ function App() {
       />
 
       <DataTable data={data} isLoading={isLoading} />
-
-      <div className="instructions">
-        <h3>📡 API Mockada - Como funciona:</h3>
-        <p>
-          Este sistema simula chamadas de API reais com latência de rede. 
-          Tanto os dados quanto a <strong>configuração de filtros</strong> vêm da API (mockada).
-        </p>
-        
-        <h3>🔄 Para usar API real:</h3>
-        <ol>
-          <li>Abra o arquivo <code>src/services/api.ts</code></li>
-          <li>Substitua <code>fetchAllTransactions</code> e <code>fetchFilterColumns</code> por chamadas reais</li>
-          <li>Ajuste a URL e headers conforme sua API</li>
-          <li>O backend deve retornar as colunas disponíveis no formato <code>FilterColumn[]</code></li>
-        </ol>
-        
-        <h3>✨ Recursos implementados:</h3>
-        <ul>
-          <li>✅ Consumo de API simulada (fácil migrar para API real)</li>
-          <li>✅ <strong>Configuração de filtros vinda da API (Backend-Driven UI)</strong></li>
-          <li>✅ Loading state durante carregamento</li>
-          <li>✅ Tratamento de erros</li>
-          <li>✅ Filtros aplicados em tempo real</li>
-          <li>✅ Tabela responsiva com dados formatados</li>
-          <li>✅ Multi-select com chips removíveis</li>
-          <li>✅ Acessibilidade de teclado (TAB + Enter/Espaço)</li>
-          <li>✅ Sistema completamente tipado (TypeScript)</li>
-        </ul>
-      </div>
     </div>
   );
 }
